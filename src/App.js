@@ -1,15 +1,15 @@
 import React from 'react'
 import {Grid} from '@material-ui/core'
 import youtube from './api/youtube'
-import {SearchBar, VideoDetail} from './components'
+import {SearchBar, VideoDetail, VideoList} from './components'
 
 class App extends React.Component{
     state = {
-        video: [],
+        videos: [],
         selectedVideo: null,
     };
 
-    handleSubmit = async ({searchTerm}) => {
+    handleSubmit = async (searchTerm) => {
         const response = await youtube.get('search', { params: {
             part: 'snippet',
             maxResults: 5,
@@ -17,12 +17,16 @@ class App extends React.Component{
             q: searchTerm,
         }});
 
-        this.setState({video: response.data.items, selectedVideo: response.data.items[0]});
+        this.setState({videos: response.data.items, selectedVideo: response.data.items[0]});
         
+    }
+
+    onVideoSelect = (video) => {
+        this.setState({selectedVideo: video});
     }
     
     render(){
-        const {selectedVideo} =  this.state;
+        const {selectedVideo, videos} =  this.state;
         return(
             <Grid justfy= 'center'container spacing={10}>
                 <Grid item xs={12}>
@@ -34,7 +38,7 @@ class App extends React.Component{
                             <VideoDetail video={selectedVideo}/>
                         </Grid>
                         <Grid item xs={4}>
-                            {/* VIDEO LIST */}
+                            <VideoList videos={videos} onVideoSelect={this.onVideoSelect}/>
                         </Grid>
                     </Grid>
                 </Grid>
