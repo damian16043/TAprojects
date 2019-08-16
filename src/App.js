@@ -21,6 +21,10 @@ class App extends React.Component{
         
     }
 
+    componentDidMount(){
+        this.handleSubmit('React');
+    }
+
     onVideoSelect = (video) => {
         this.setState({selectedVideo: video});
     }
